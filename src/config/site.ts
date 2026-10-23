@@ -26,7 +26,7 @@ const GALLERY_WIDTHS = [640, 1280, 1920]
 
 export const SITE: SiteConfig = {
   name: 'Jane Materiais para Construção',
-  url: '',
+  url: 'https://janemateriais-opal.vercel.app/',
 
   seo: {
     title: 'Jane Materiais para Construção | Guariba - SP',
