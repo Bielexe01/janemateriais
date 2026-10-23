@@ -1,0 +1,287 @@
+@import 'tailwindcss';
+/* Não varrer a saída do build nem as configs locais: o CSS ganhava classes
+   antigas vindas do dist/ a cada novo build. */
+@source not '../dist';
+@source not '../.kiro';
+
+@theme {
+  /* Paleta do cartão de visita: verde, vermelho e branco.
+     Os nomes antigos (graphite, chumbo, ember) foram mantidos para não mexer em
+     todos os componentes; agora "graphite" é o verde-escuro e "ember" o vermelho. */
+  --color-graphite: #0f3626; /* verde-escuro: seções escuras, cabeçalho, rodapé */
+  --color-graphite-950: #0a281c;
+  --color-chumbo: #164a33; /* verde intermediário */
+  --color-chumbo-600: #1f5c40;
+  --color-pine: #1d5c3d; /* verde do cartão (hero) */
+  --color-pine-700: #154a30;
+  --color-bone: #f6f5f0; /* branco quente das seções claras */
+  --color-bone-200: #ebe9e1;
+  --color-bone-300: #dcd9cf;
+  --color-brand: #d9252b; /* vermelho do cartão: botões e preenchimentos */
+  --color-brand-600: #b81d23;
+  --color-ember: #ff6f61; /* vermelho claro: textos e detalhes sobre verde (contraste) */
+  --color-ember-400: #ff8c80;
+  --color-ember-600: #c62828; /* vermelho para texto sobre fundo claro */
+  --color-ember-700: #a61e1e;
+  --color-steel-200: #d3dcd6;
+  --color-steel-300: #aebcb4;
+  --color-steel-400: #8c9c93;
+  --color-steel-600: #56645d;
+  --color-steel-700: #3f4c46;
+  --color-open: #6ee7a8;
+  --color-closed: #ff8c80;
+
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+
+  --text-hero: clamp(2.6rem, 6.6vw, 6.6rem);
+  --text-hero--line-height: 0.94;
+  --text-section: clamp(2.35rem, 5.4vw, 5.25rem);
+  --text-section--line-height: 0.95;
+
+  --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-scroll-cue: scroll-cue 2.4s var(--ease-cine) infinite;
+  --animate-ping-soft: ping-soft 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-glow: glow 9s ease-in-out infinite alternate;
+  --animate-bob: bob 2.2s ease-in-out infinite;
+
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    50% {
+      transform: translateY(3px);
+    }
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-110%);
+    }
+    65%,
+    100% {
+      transform: translateY(330%);
+    }
+  }
+  @keyframes ping-soft {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    80%,
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+  @keyframes glow {
+    from {
+      opacity: 0.55;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      opacity: 0.9;
+      transform: translate3d(-4%, 3%, 0) scale(1.08);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --focus: var(--color-ember);
+    --header-h: 4.5rem;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-graphite);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--color-ember);
+    color: var(--color-graphite);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  section[id],
+  [data-anchor] {
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Seções claras usam um tom de laranja mais escuro no foco, para manter o contraste. */
+@utility on-light {
+  --focus: var(--color-ember-700);
+}
+
+@utility container-x {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4.5vw, 4.5rem);
+}
+
+/* Títulos: Archivo expandida, pesada e com espaçamento justo. */
+@utility font-display {
+  font-family: var(--font-sans);
+  font-stretch: 112%;
+  font-weight: 680;
+  letter-spacing: -0.035em;
+}
+
+/* Destaque editorial: serifada itálica (Instrument Serif). */
+@utility accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-stretch: 100%;
+  letter-spacing: -0.012em;
+  font-size: 1.08em;
+  line-height: 0.9;
+  padding-right: 0.04em;
+}
+
+@utility eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* Textura de grão de filme, bem discreta. */
+@utility grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* Grade fina de prancheta técnica. */
+@utility blueprint {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px currentColor;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Galeria: composição assimétrica (revista de arquitetura).
+ * Celular/tablet: 2 colunas com proporções variadas.
+ * Desktop: grade de 12 colunas em três faixas.
+ * ------------------------------------------------------------------------- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.4vw, 1rem);
+}
+.gallery-grid > :nth-child(8n + 1) {
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+}
+.gallery-grid > :nth-child(8n + 2),
+.gallery-grid > :nth-child(8n + 3) {
+  aspect-ratio: 3 / 4;
+}
+.gallery-grid > :nth-child(8n + 4) {
+  grid-column: span 2;
+  aspect-ratio: 16 / 10;
+}
+.gallery-grid > :nth-child(8n + 5),
+.gallery-grid > :nth-child(8n + 6) {
+  aspect-ratio: 1;
+}
+.gallery-grid > :nth-child(8n + 7) {
+  grid-column: span 2;
+  aspect-ratio: 4 / 3;
+}
+.gallery-grid > :nth-child(8n + 8) {
+  grid-column: span 2;
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 1024px) {
+  .gallery-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: clamp(10rem, 16vw, 15rem);
+  }
+  .gallery-grid > * {
+    aspect-ratio: auto !important;
+  }
+  .gallery-grid > :nth-child(8n + 1) {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+  .gallery-grid > :nth-child(8n + 2),
+  .gallery-grid > :nth-child(8n + 3) {
+    grid-column: span 5;
+  }
+  .gallery-grid > :nth-child(8n + 4) {
+    grid-column: span 3;
+    grid-row: span 2;
+  }
+  .gallery-grid > :nth-child(8n + 5) {
+    grid-column: span 5;
+    grid-row: span 2;
+  }
+  .gallery-grid > :nth-child(8n + 6) {
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+  .gallery-grid > :nth-child(8n + 7) {
+    grid-column: span 5;
+    grid-row: span 2;
+  }
+  .gallery-grid > :nth-child(8n + 8) {
+    grid-column: span 7;
+    grid-row: span 2;
+  }
+}
